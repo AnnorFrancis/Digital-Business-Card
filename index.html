@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Business Card</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <style>
+      :root {
+        --primary-color: #0654ba;
+        --secondary-color: #0b1220;
+        --card-bg: rgba(255, 255, 255, 0.78);
+        --text-color: #101828;
+        --muted-text: rgba(16, 24, 40, 0.72);
+        --button-text: #ffffff;
+        --border-color: rgba(255, 255, 255, 0.22);
+        --shadow: 0 18px 55px rgba(0, 0, 0, 0.28);
+      }
+
+      body.dark-mode {
+        --primary-color: #7ab0ff;
+        --secondary-color: #060a14;
+        --card-bg: rgba(12, 18, 33, 0.72);
+        --text-color: #ffffff;
+        --muted-text: rgba(255, 255, 255, 0.72);
+        --button-text: #0b1220;
+        --border-color: rgba(255, 255, 255, 0.14);
+        --shadow: 0 22px 70px rgba(0, 0, 0, 0.5);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* PREMIUM CINEMATIC BACKGROUND */
+      body {
+        font-family: "Poppins", sans-serif;
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 22px;
+        overflow-x: hidden;
+        transition: background 0.25s, color 0.25s;
+
+        background: radial-gradient(
+            1200px circle at 20% 10%,
+            rgba(6, 84, 186, 0.4),
+            transparent 55%
+          ),
+          radial-gradient(
+            900px circle at 80% 30%,
+            rgba(122, 176, 255, 0.3),
+            transparent 52%
+          ),
+          radial-gradient(
+            800px circle at 50% 95%,
+            rgba(255, 255, 255, 0.1),
+            transparent 55%
+          ),
+          linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.72)),
+          url("assets/f1.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+      }
+
+      /* subtle “film grain” */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+        opacity: 0.1;
+        mix-blend-mode: overlay;
+      }
+
+      .wrap {
+        width: 100%;
+        max-width: 470px;
+      }
+
+      /* GLASS CARD */
+      .card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 22px;
+        padding: 30px;
+        text-align: center;
+
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow);
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: background 0.25s, color 0.25s, border-color 0.25s,
+          transform 0.25s;
+      }
+
+      /* glow blobs behind card content */
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: -140px;
+        background: radial-gradient(
+            circle at 20% 20%,
+            rgba(6, 84, 186, 0.18),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 82% 28%,
+            rgba(122, 176, 255, 0.16),
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at 50% 92%,
+            rgba(255, 255, 255, 0.12),
+            transparent 46%
+          );
+        pointer-events: none;
+      }
+
+      /* top highlight line */
+      .card::after {
+        content: "";
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        top: 12px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.45),
+          transparent
+        );
+        pointer-events: none;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.2px;
+        color: var(--muted-text);
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--border-color);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text-color);
+        padding: 9px 12px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.86rem;
+        transition: transform 0.08s ease, opacity 0.2s ease, border-color 0.25s;
+        user-select: none;
+      }
+      .pill:hover {
+        opacity: 0.92;
+      }
+      .pill:active {
+        transform: scale(0.98);
+      }
+
+      .profile-img {
+        width: 122px;
+        height: 122px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto 18px auto;
+        border: 4px solid rgba(255, 255, 255, 0.35);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+        position: relative;
+        z-index: 2;
+      }
+      .profile-img::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: 50%;
+        background: conic-gradient(
+          from 90deg,
+          rgba(122, 176, 255, 0),
+          rgba(122, 176, 255, 0.35),
+          rgba(6, 84, 186, 0.35),
+          rgba(122, 176, 255, 0)
+        );
+        filter: blur(10px);
+        z-index: 0;
+      }
+      .profile-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: relative;
+        z-index: 1;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 7px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .title {
+        font-size: 1.03rem;
+        color: var(--primary-color);
+        margin-bottom: 6px;
+        font-weight: 600;
+        position: relative;
+        z-index: 2;
+      }
+
+      .company {
+        font-size: 0.93rem;
+        color: var(--muted-text);
+        margin-bottom: 14px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .description {
+        font-size: 0.93rem;
+        margin-bottom: 18px;
+        line-height: 1.6;
+        color: var(--muted-text);
+        position: relative;
+        z-index: 2;
+      }
+
+      .btn-group {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 18px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 0.93rem;
+        color: var(--button-text);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        transition: opacity 0.2s, transform 0.08s ease, filter 0.2s;
+
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          rgba(6, 84, 186, 0.62)
+        );
+        box-shadow: 0 12px 26px rgba(6, 84, 186, 0.22);
+      }
+      .btn:hover {
+        opacity: 0.95;
+        filter: saturate(1.06);
+      }
+      .btn:active {
+        transform: scale(0.99);
+      }
+
+      .sub-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 12px 0 6px 0;
+        position: relative;
+        z-index: 2;
+      }
+      .sub-actions button,
+      .sub-actions a {
+        font-size: 0.86rem;
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        padding: 9px 12px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text-color);
+        text-decoration: none;
+        transition: opacity 0.2s, transform 0.08s ease;
+      }
+      .sub-actions button:hover,
+      .sub-actions a:hover {
+        opacity: 0.92;
+      }
+      .sub-actions button:active,
+      .sub-actions a:active {
+        transform: scale(0.99);
+      }
+
+      .qr {
+        margin: 18px 0 6px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .qr img {
+        width: 160px;
+        height: 160px;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        background: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+      }
+
+      .hint {
+        font-size: 0.82rem;
+        color: var(--muted-text);
+        line-height: 1.35;
+        position: relative;
+        z-index: 2;
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.82);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-size: 0.88rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        max-width: calc(100vw - 40px);
+        text-align: center;
+        z-index: 9999;
+      }
+      .toast.show {
+        opacity: 1;
+      }
+
+      @media (max-width: 420px) {
+        .btn-group {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="topbar">
+          <div class="brand">
+            <i class="fas fa-id-card"></i>
+            <span>Digital Card</span>
+          </div>
+          <button id="themeBtn" class="pill" type="button" title="Toggle theme">
+            <i class="fas fa-moon"></i>
+            <span>Theme</span>
+          </button>
+        </div>
+
+        <div class="profile-img">
+          <!-- Update this image path to your own photo -->
+          <img id="avatar" src="assets/fran.png" alt="Profile photo" />
+        </div>
+
+        <h1 id="name">ANNOR FRANCIS PERKINS</h1>
+        <p class="title" id="role">
+          PROFESSIONAL WRITER | GRAPHIC DESINGER | WEB DEVELOPER
+        </p>
+        <p class="company" id="company">PERKINS SERVICES</p>
+        <p class="description" id="bio">
+          A professional writer, graphic designer, and web developer with over 5
+          years of experience helping businesses establish a strong online
+          presence through compelling content and stunning visuals.
+        </p>
+
+        <div class="btn-group" id="buttons"></div>
+
+        <div class="qr">
+          <img id="qrImg" alt="QR Code to this card" />
+          <div class="hint">
+            <!-- Scan the QR code to open this card. (It automatically uses your live
+            URL once hosted.) -->
+          </div>
+        </div>
+
+        <div class="sub-actions">
+          <button id="shareBtn" type="button">
+            <i class="fas fa-share-alt"></i> Share
+          </button>
+          <button id="saveContactBtn" type="button">
+            <i class="fas fa-address-book"></i> Save Contact
+          </button>
+        </div>
+
+        <div class="hint" style="margin-top: 14px">
+          <!-- Built as a single-file page: easy to host on GitHub Pages and share. -->
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+      // ---------------------------
+      // DIGITAL BUSINESS CARD (FINAL - NO EDIT MODE)
+      // ---------------------------
+
+      // ✅ CHANGE THESE DETAILS TO YOUR BUSINESS DETAILS
+      const CARD_DATA = {
+        name: "ANNOR FRANCIS PERKINS",
+        role: "PROFESSIONAL WRITER | GRAPHIC DESINGER | WEB DEVELOPER",
+        company: "PERKINS SERVICES",
+        bio: "A professional writer, graphic designer, and web developer with over 5 years of experience helping businesses establish a strong online presence through compelling content and stunning visuals.",
+        primaryColor: "#0654ba",
+        avatarSrc: "assets/fran.png",
+
+        phone: "0200214147",
+        email: "Annorfrancis23@outlook.com",
+        website: "",
+        whatsapp: "0538713916",
+        linkedin: "www.linkedin.com/in/francis-annor-649a0a26a",
+        twitter: "",
+
+        vcard: {
+          org: "Your Company Name",
+          title: "Digital Solutions Specialist",
+          note: "Digital Business Card",
+        },
+      };
+
+      const $ = (id) => document.getElementById(id);
+      const toastEl = $("toast");
+
+      function toast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add("show");
+        setTimeout(() => toastEl.classList.remove("show"), 2200);
+      }
+
+      function normalizeUrl(url) {
+        if (!url) return "";
+        const trimmed = url.trim();
+        if (!trimmed) return "";
+        if (trimmed.startsWith("http://") || trimmed.startsWith("https://"))
+          return trimmed;
+        return "https://" + trimmed;
+      }
+
+      function cleanPhone(phone) {
+        return (phone || "")
+          .trim()
+          .replace(/(?!^)\+/g, "")
+          .replace(/[^+\d]/g, "");
+      }
+
+      function setPrimaryColor(hex) {
+        const val = (hex || "").trim() || "#0654ba";
+        document.documentElement.style.setProperty("--primary-color", val);
+      }
+
+      function buildButtons(data) {
+        const buttons = [];
+
+        const phone = cleanPhone(data.phone);
+        if (phone) {
+          buttons.push({
+            label: "Call",
+            icon: "fas fa-phone",
+            href: "tel:" + phone,
+          });
+        }
+
+        if (data.email) {
+          buttons.push({
+            label: "Email",
+            icon: "fas fa-envelope",
+            href: "mailto:" + data.email.trim(),
+          });
+        }
+
+        const website = normalizeUrl(data.website);
+        if (website) {
+          buttons.push({
+            label: "Website",
+            icon: "fas fa-globe",
+            href: website,
+          });
+        }
+
+        const wa = cleanPhone(data.whatsapp);
+        if (wa) {
+          const waDigits = wa.replace(/^\+/, "");
+          buttons.push({
+            label: "WhatsApp",
+            icon: "fab fa-whatsapp",
+            href: "https://wa.me/" + waDigits,
+          });
+        }
+
+        const linkedin = normalizeUrl(data.linkedin);
+        if (linkedin) {
+          buttons.push({
+            label: "LinkedIn",
+            icon: "fab fa-linkedin",
+            href: linkedin,
+          });
+        }
+
+        const twitter = normalizeUrl(data.twitter);
+        if (twitter) {
+          buttons.push({
+            label: "X",
+            icon: "fab fa-twitter",
+            href: twitter,
+          });
+        }
+
+        const wrap = $("buttons");
+        wrap.innerHTML = "";
+        for (const b of buttons) {
+          const a = document.createElement("a");
+          a.className = "btn";
+          a.href = b.href;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.innerHTML = `<i class="${b.icon}"></i><span>${b.label}</span>`;
+          wrap.appendChild(a);
+        }
+      }
+
+      function buildQr() {
+        const url = window.location.href;
+        const qrUrl =
+          "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
+          encodeURIComponent(url);
+        $("qrImg").src = qrUrl;
+      }
+
+      // Share
+      async function shareCard() {
+        const shareUrl = window.location.href;
+        if (navigator.share) {
+          try {
+            await navigator.share({ title: document.title, url: shareUrl });
+          } catch (e) {}
+        } else if (navigator.clipboard) {
+          try {
+            await navigator.clipboard.writeText(shareUrl);
+            toast("Card link copied!");
+          } catch {
+            toast("Copy failed. Please copy the URL manually.");
+          }
+        } else {
+          toast("Share not supported. Copy the URL manually.");
+        }
+      }
+
+      // vCard
+      function vcardEscape(s) {
+        return (s || "")
+          .replace(/\\/g, "\\\\")
+          .replace(/\n/g, "\\n")
+          .replace(/;/g, "\\;")
+          .replace(/,/g, "\\,");
+      }
+
+      function buildVCard(data) {
+        const name = (data.name || "").trim();
+        const email = (data.email || "").trim();
+        const phone = cleanPhone(data.phone);
+        const website = normalizeUrl(data.website);
+
+        const org = (data.vcard?.org || data.company || "").trim();
+        const title = (data.vcard?.title || data.role || "").trim();
+        const note = (data.vcard?.note || "").trim();
+
+        const parts = name.split(/\s+/).filter(Boolean);
+        const last = parts.length ? parts[parts.length - 1] : "";
+        const first =
+          parts.length > 1 ? parts.slice(0, -1).join(" ") : parts[0] || "";
+
+        const lines = [
+          "BEGIN:VCARD",
+          "VERSION:3.0",
+          `N:${vcardEscape(last)};${vcardEscape(first)};;;`,
+          `FN:${vcardEscape(name)}`,
+        ];
+
+        if (org) lines.push(`ORG:${vcardEscape(org)}`);
+        if (title) lines.push(`TITLE:${vcardEscape(title)}`);
+        if (phone) lines.push(`TEL;TYPE=CELL:${vcardEscape(phone)}`);
+        if (email) lines.push(`EMAIL;TYPE=INTERNET:${vcardEscape(email)}`);
+        if (website) lines.push(`URL:${vcardEscape(website)}`);
+        if (note) lines.push(`NOTE:${vcardEscape(note)}`);
+
+        lines.push("END:VCARD");
+        return lines.join("\n");
+      }
+
+      function downloadTextFile(filename, text, mime) {
+        const blob = new Blob([text], { type: mime || "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function saveContact() {
+        const vcf = buildVCard(CARD_DATA);
+        const safeName = (CARD_DATA.name || "contact")
+          .trim()
+          .replace(/[^a-z0-9]+/gi, "_")
+          .replace(/^_+|_+$/g, "");
+        downloadTextFile(`${safeName || "contact"}.vcf`, vcf, "text/vcard");
+        toast("Contact file downloaded (.vcf)");
+      }
+
+      // Theme
+      function setTheme(isDark) {
+        document.body.classList.toggle("dark-mode", !!isDark);
+        localStorage.setItem("dbc_theme", isDark ? "dark" : "light");
+      }
+
+      function render() {
+        $("name").textContent = CARD_DATA.name;
+        $("role").textContent = CARD_DATA.role;
+        $("company").textContent = CARD_DATA.company;
+        $("bio").textContent = CARD_DATA.bio;
+
+        setPrimaryColor(CARD_DATA.primaryColor);
+        $("avatar").src = CARD_DATA.avatarSrc;
+
+        buildButtons(CARD_DATA);
+        buildQr();
+      }
+
+      // Init
+      (function init() {
+        const savedTheme = localStorage.getItem("dbc_theme");
+        setTheme(savedTheme === "dark");
+
+        $("themeBtn").addEventListener("click", () =>
+          setTheme(!document.body.classList.contains("dark-mode"))
+        );
+        $("shareBtn").addEventListener("click", shareCard);
+        $("saveContactBtn").addEventListener("click", saveContact);
+
+        render();
+
+        // Keep QR accurate if URL changes (GitHub pages sometimes changes path)
+        window.addEventListener("hashchange", buildQr);
+      })();
+    </script>
+  </body>
+</html>

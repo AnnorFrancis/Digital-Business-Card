@@ -1,0 +1,43 @@
+DIGITAL BUSINESS CARD PRO — Sales Copy (Gumroad / Selar / Payhip)
+
+One-line pitch
+-------------
+A clean, mobile-first digital business card you can share as a link or QR code — with a built-in contact download (.VCF) and optional no-code Edit Mode.
+
+What buyers get
+--------------
+- A ready-to-use digital business card (single-page website)
+- Light/Dark theme toggle
+- Tap-to-call, email, website, WhatsApp, and social buttons
+- QR code that automatically points to the live card URL
+- "Save Contact" button that downloads a vCard (.VCF) instantly
+- Share button (Web Share API + clipboard fallback)
+- Quick Edit panel (no coding) + a Lock switch to disable edits when done
+
+Who it's perfect for
+--------------------
+Freelancers, small business owners, job seekers, creators, realtors, barbers/salon owners, photographers, consultants, coaches, and anyone who wants a premium online card.
+
+How it works (3 steps)
+----------------------
+1) Open the file and click Edit
+2) Add your details and Save
+3) Upload the folder to any host (GitHub Pages / Netlify / Vercel) and share the link or QR
+
+Why it’s better than a normal business card
+-------------------------------------------
+- One link replaces a stack of paper cards
+- People can save your contact in 1 tap
+- QR works instantly at events and meetings
+- Looks premium on any phone
+
+What’s included
+---------------
+- index.html
+- assets/avatar.svg
+- README.txt (setup + deployment guide)
+- LICENSE.txt
+
+Notes
+-----
+No subscription. Works on any modern phone/browser.
