@@ -588,9 +588,9 @@
       }
 
       function buildQr() {
-        const url = window.location.href;
+        const url = "https://annorfrancis.github.io/Digital-Business-Card/";
         const qrUrl =
-          "https://annorfrancis.github.io/Digital-Business-Card/" +
+          "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
           encodeURIComponent(url);
         $("qrImg").src = qrUrl;
       }
